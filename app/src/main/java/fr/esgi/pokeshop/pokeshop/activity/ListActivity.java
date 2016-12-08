@@ -1,10 +1,11 @@
-package fr.esgi.pokeshop.pokeshop;
+package fr.esgi.pokeshop.pokeshop.activity;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
+import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeListFragment;
 
 

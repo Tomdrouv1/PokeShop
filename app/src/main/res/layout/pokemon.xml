@@ -8,21 +8,21 @@
     <Button
         android:id="@+id/poke_button"
         android:layout_width="@dimen/poke_image_width"
-        android:layout_height="@dimen/poke_image_height"/>
+        android:layout_height="@dimen/poke_image_height"
+        android:layout_gravity="center_horizontal"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
         <TextView
             android:id="@+id/poke_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/poke_price"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>
