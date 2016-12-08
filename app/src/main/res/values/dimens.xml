@@ -9,9 +9,12 @@
     <dimen name="grid_column_width">90dp</dimen>
 
     <!-- Pokemon image dimensions -->
-    <dimen name="poke_image_width">80dp</dimen>
-    <dimen name="poke_image_height">80dp</dimen>
+    <dimen name="poke_image_width">60dp</dimen>
+    <dimen name="poke_image_height">60dp</dimen>
 
     <!-- Navigation drawer dimensions -->
     <dimen name="navigation_drawer_width">200dp</dimen>
+
+    <!-- GridView button and ListView button dimensions -->
+    <dimen name="view_button_size">30dp</dimen>
 </resources>

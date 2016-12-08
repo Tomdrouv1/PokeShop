@@ -34,8 +34,10 @@ public class GridActivity extends AppCompatActivity {
         addDrawerItems();
         setupDrawer();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
 
         getFragmentManager().beginTransaction()
@@ -58,13 +60,21 @@ public class GridActivity extends AppCompatActivity {
                 mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation");
+
+                if(getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Navigation");
+                }
+
                 invalidateOptionsMenu();
             }
 
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(mActivityTitle);
+
+                if(getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(mActivityTitle);
+                }
+
                 invalidateOptionsMenu();
             }
         };

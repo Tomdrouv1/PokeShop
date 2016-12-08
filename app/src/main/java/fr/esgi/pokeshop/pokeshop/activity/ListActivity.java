@@ -20,10 +20,4 @@ public class ListActivity extends AppCompatActivity {
             .add(R.id.fragment_list, new PokeListFragment())
             .commit();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
 }
