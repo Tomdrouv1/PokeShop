@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pokemon_layout"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/poke_button"
         android:layout_width="@dimen/poke_image_width"
-        android:layout_height="@dimen/poke_image_height"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_height="@dimen/poke_image_height"/>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/poke_description">
+        <TextView
+            android:id="@+id/poke_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/poke_name"
             android:layout_width="wrap_content"
@@ -23,6 +27,7 @@
         <TextView
             android:id="@+id/poke_price"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"/>
     </LinearLayout>
 </LinearLayout>

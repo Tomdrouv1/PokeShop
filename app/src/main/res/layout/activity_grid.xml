@@ -23,10 +23,11 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/list_grid_title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/grid_title"
+                android:text="@string/list_title"
                 android:gravity="center_vertical"/>
 
             <include layout="@layout/list_grid"
@@ -35,19 +36,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"/>
         </LinearLayout>
-
-        <fragment
-            android:name="fr.esgi.pokeshop.pokeshop.fragment.PokeGridFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_grid"
-            android:layout_below="@id/list_grid_layout"
-            tools:layout="@layout/fragment_grid" />
     </RelativeLayout>
     <ListView
         android:id="@+id/navigation_list"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#ffeeee"/>
+        android:background="#fff"
+        android:divider="#fff"
+        android:headerDividersEnabled="true"/>
 </android.support.v4.widget.DrawerLayout>

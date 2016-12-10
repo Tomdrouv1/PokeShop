@@ -10,10 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeGridFragment;
+import fr.esgi.pokeshop.pokeshop.fragment.PokeListFragment;
 
 public class GridActivity extends AppCompatActivity {
 
@@ -21,6 +24,10 @@ public class GridActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
+    private Button mGridButton;
+    private Button mListButton;
+    private TextView mListGridTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +37,23 @@ public class GridActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.navigation_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
+        mGridButton = (Button) findViewById(R.id.to_grid);
+        mListButton = (Button) findViewById(R.id.to_list);
+        mListGridTitle = (TextView) findViewById(R.id.list_grid_title);
+
+        getFragmentManager().beginTransaction()
+            .add(R.id.activity_list, new PokeListFragment())
+            .commit();
 
         addDrawerItems();
         setupDrawer();
+        setButtonListener();
 
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
-
-        getFragmentManager().beginTransaction()
-            .add(R.id.fragment_grid, new PokeGridFragment())
-            .commit();
     }
 
     private void addDrawerItems() {
@@ -81,6 +92,30 @@ public class GridActivity extends AppCompatActivity {
 
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+    }
+
+    private void setButtonListener() {
+        mGridButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.activity_list, new PokeGridFragment())
+                        .commit();
+
+                mListGridTitle.setText(R.string.grid_title);
+            }
+        });
+
+        mListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.activity_list, new PokeListFragment())
+                        .commit();
+
+                mListGridTitle.setText(R.string.list_title);
+            }
+        });
     }
 
     @Override
