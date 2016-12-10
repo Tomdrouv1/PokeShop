@@ -1,68 +1,135 @@
 package fr.esgi.pokeshop.pokeshop;
 
-import android.content.res.Resources;
-import android.util.Log;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-
-import fr.esgi.pokeshop.pokeshop.model.Product;
+import java.net.URLConnection;
+import java.util.UUID;
 
 /**
  * Created by Marion on 02/12/2016.
  */
 
-public class WebService {
+public class WebService extends AsyncTask<String, Void, Void> {
 
-    private String url = "http://appspaces.fr/esgi/shopping_list/product/list.php";
+    private Context context;
+    private String content;
+    private String error;
+    private ProgressDialog progressDialog;
+    private String data = "";
+    private TextView showReceivedData;
+    private TextView showParsedJSON;
+    private String token = UUID.randomUUID().toString();
 
-    Gson gson;
-
-    public WebService() {
-        gson = new Gson();
+    public WebService(Context cxt, TextView receivedData, TextView parsedData) {
+        context = cxt;
+        progressDialog = new ProgressDialog(context);
+        showReceivedData = receivedData;
+        showParsedJSON = parsedData;
     }
 
-    private InputStream sendRequest(URL url) throws Exception {
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        progressDialog.setTitle("Chargement ...");
+        progressDialog.show();
+    }
+
+    @Override
+    protected Void doInBackground(String... params) {
+        BufferedReader br = null;
+
+        URL url;
         try {
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            url = new URL(params[0]);
+            URLConnection connection = url.openConnection();
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Token token=" + token);
+            connection.setDoOutput(true);
 
+            OutputStreamWriter outputStreamWr = new OutputStreamWriter(connection.getOutputStream());
+            outputStreamWr.write(data);
+            outputStreamWr.flush();
+
+            br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+
+            while((line = br.readLine())!=null) {
+                sb.append(line);
+                sb.append(System.getProperty("line.separator"));
+            }
+
+            content = sb.toString();
+
+        } catch (MalformedURLException e) {
+            error = e.getMessage();
+            e.printStackTrace();
+        } catch (IOException e) {
+            error = e.getMessage();
+            e.printStackTrace();
+        } finally {
             try {
-                urlConnection.connect();
-                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    return urlConnection.getInputStream();
-                }
-            } finally {
-                urlConnection.disconnect();
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch(Exception e) {
-            throw new Exception("");
         }
         return null;
     }
 
-    public List<Product> getProducts() {
 
-        try {
-            InputStream inputStream = sendRequest(new URL(url));
+    @Override
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
 
-            if(inputStream != null) {
-                InputStreamReader reader = new InputStreamReader(inputStream);
+        progressDialog.dismiss();
 
-                return gson.fromJson(reader, new TypeToken<List<Product>>(){}.getType());
-            }
-        } catch(Exception e) {
-            throw new RuntimeException(e);
+        if(error!=null) {
+            showReceivedData.setText("Error " + error);
+        } else {
+            showReceivedData.setText(content);
+
+//            String output = "";
+//            JSONObject jsonResponse;
+//
+//            try {
+//                jsonResponse = new JSONObject(content);
+//
+//                JSONArray jsonArray = jsonResponse.optJSONArray("results");
+//
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    JSONObject child = jsonArray.getJSONObject(i);
+//
+//                    String name = child.getString("name");
+//
+//                    output += name + System.getProperty("line.separator");
+//                    output += System.getProperty("line.separator");
+//
+//                }
+//
+//                showParsedJSON.setText(output);
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+
         }
-        return null;
     }
+
 
 }
