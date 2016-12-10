@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/list_grid_layout">
+
+    <GridView
+        android:id="@+id/poke_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="@dimen/grid_column_width"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="@dimen/grid_vertical_spacing"
+        android:gravity="center"
+        android:stretchMode="spacingWidthUniform" />
+</RelativeLayout>

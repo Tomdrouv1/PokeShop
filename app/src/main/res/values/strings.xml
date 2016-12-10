@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PokeShop</string>
+    <string name="shopping_cart">Panier</string>
+    <string name="account_profile">Profil</string>
+    <string name="drawer_open">Ouvrir la navigation</string>
+    <string name="drawer_close">Fermer la navigation</string>
+    <string name="list_title">Liste des Pokémons</string>
+    <string name="grid_title">Grille des Pokémons</string>
 </resources>

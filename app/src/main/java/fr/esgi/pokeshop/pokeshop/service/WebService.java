@@ -1,4 +1,4 @@
-package fr.esgi.pokeshop.pokeshop;
+package fr.esgi.pokeshop.pokeshop.service;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,9 +18,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 
-/**
- * Created by Marion on 02/12/2016.
- */
 
 public class WebService extends AsyncTask<String, Void, Void> {
 
