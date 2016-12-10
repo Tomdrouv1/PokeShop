@@ -7,5 +7,4 @@ public class PokeHolder {
     public Button button;
     public TextView text;
     public TextView price;
-    public TextView number;
 }
