@@ -3,9 +3,6 @@ package fr.esgi.pokeshop.pokeshop.service;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.TextView;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,28 +10,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.UUID;
 
 
-public class WebService extends AsyncTask<String, Void, Void> {
+public class WebService extends AsyncTask<String, Void, JSONObject> {
 
     private Context context;
     private String content;
     private String error;
     private ProgressDialog progressDialog;
     private String data = "";
-    private TextView showReceivedData;
-    private TextView showParsedJSON;
-    private String token = UUID.randomUUID().toString();
+    private ConnectListener listener;
 
-    public WebService(Context cxt, TextView receivedData, TextView parsedData) {
+    public WebService(Context cxt) {
         context = cxt;
         progressDialog = new ProgressDialog(context);
-        showReceivedData = receivedData;
-        showParsedJSON = parsedData;
     }
 
 
@@ -47,15 +38,16 @@ public class WebService extends AsyncTask<String, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected JSONObject doInBackground(String... params) {
         BufferedReader br = null;
 
         URL url;
+        JSONObject jsonResponse = null;
+
         try {
             url = new URL(params[0]);
             URLConnection connection = url.openConnection();
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Authorization", "Token token=" + token);
             connection.setDoOutput(true);
 
             OutputStreamWriter outputStreamWr = new OutputStreamWriter(connection.getOutputStream());
@@ -72,8 +64,9 @@ public class WebService extends AsyncTask<String, Void, Void> {
             }
 
             content = sb.toString();
+            jsonResponse = new JSONObject(content);
 
-        } catch (MalformedURLException e) {
+        } catch (JSONException e) {
             error = e.getMessage();
             e.printStackTrace();
         } catch (IOException e) {
@@ -86,47 +79,33 @@ public class WebService extends AsyncTask<String, Void, Void> {
                 e.printStackTrace();
             }
         }
-        return null;
+        return jsonResponse;
     }
 
 
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(JSONObject result) {
         super.onPostExecute(result);
-
+        String msg = null;
         progressDialog.dismiss();
-
-        if(error!=null) {
-            showReceivedData.setText("Error " + error);
-        } else {
-            showReceivedData.setText(content);
-
-//            String output = "";
-//            JSONObject jsonResponse;
-//
-//            try {
-//                jsonResponse = new JSONObject(content);
-//
-//                JSONArray jsonArray = jsonResponse.optJSONArray("results");
-//
-//                for (int i = 0; i < jsonArray.length(); i++) {
-//                    JSONObject child = jsonArray.getJSONObject(i);
-//
-//                    String name = child.getString("name");
-//
-//                    output += name + System.getProperty("line.separator");
-//                    output += System.getProperty("line.separator");
-//
-//                }
-//
-//                showParsedJSON.setText(output);
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-
+        try {
+            if (listener != null && result != null){
+                listener.onSuccess(result);
+            } else{
+               msg = result.getString("msg");
+                listener.onFailed(msg);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
+    public void setListener(ConnectListener listener) {
+        this.listener = listener;
+    }
+
+    public ConnectListener getListener() {
+        return listener;
+    }
 
 }
