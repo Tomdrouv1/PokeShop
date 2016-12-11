@@ -1,6 +1,12 @@
 package fr.esgi.pokeshop.pokeshop.activity;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -9,14 +15,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeGridFragment;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeListFragment;
+import fr.esgi.pokeshop.pokeshop.fragment.RegisterFragment;
+import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
+import fr.esgi.pokeshop.pokeshop.service.WebService;
 
 public class GridActivity extends AppCompatActivity {
 
@@ -28,11 +43,11 @@ public class GridActivity extends AppCompatActivity {
     private Button mListButton;
     private TextView mListGridTitle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
+
 
         mListView = (ListView) findViewById(R.id.navigation_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -53,17 +68,61 @@ public class GridActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
-
     }
 
     private void addDrawerItems() {
         String[] navigationArray = {
                 "Pokémons",
-                "Catégories"
+                "Catégories",
+                "S'inscrire"
         };
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, navigationArray);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItem(position);
+            }
+        });
+    }
+
+    private void selectItem(int position) {
+        Fragment fragment;
+        Bundle args;
+        FragmentManager fragmentManager;
+        switch(position) {
+            case 0:
+                fragment = new PokeGridFragment();
+                args = new Bundle();
+                fragment.setArguments(args);
+
+                fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.activity_list, fragment)
+                        .commit();
+
+                mListView.setItemChecked(position, true);
+                mDrawerLayout.closeDrawer(mListView);
+                break;
+            case 1:
+                Toast.makeText(GridActivity.this, "todo", Toast.LENGTH_LONG).show();
+                break;
+            case 2:
+                fragment = new RegisterFragment();
+                args = new Bundle();
+                fragment.setArguments(args);
+
+                fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.activity_list, fragment)
+                        .commit();
+
+                mListView.setItemChecked(position, true);
+                mDrawerLayout.closeDrawer(mListView);
+                break;
+            default:
+        }
     }
 
     private void setupDrawer() {
