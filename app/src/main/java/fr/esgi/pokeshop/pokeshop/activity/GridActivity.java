@@ -2,11 +2,7 @@ package fr.esgi.pokeshop.pokeshop.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -22,16 +18,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import fr.esgi.pokeshop.pokeshop.R;
+import fr.esgi.pokeshop.pokeshop.fragment.SignInFragment;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeGridFragment;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeListFragment;
-import fr.esgi.pokeshop.pokeshop.fragment.RegisterFragment;
-import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
-import fr.esgi.pokeshop.pokeshop.service.WebService;
+import fr.esgi.pokeshop.pokeshop.fragment.SignUpFragment;
 
 public class GridActivity extends AppCompatActivity {
 
@@ -74,7 +65,8 @@ public class GridActivity extends AppCompatActivity {
         String[] navigationArray = {
                 "Pokémons",
                 "Catégories",
-                "S'inscrire"
+                "S'inscrire",
+                "Se connecter"
         };
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, navigationArray);
@@ -88,41 +80,36 @@ public class GridActivity extends AppCompatActivity {
     }
 
     private void selectItem(int position) {
-        Fragment fragment;
-        Bundle args;
-        FragmentManager fragmentManager;
         switch(position) {
             case 0:
-                fragment = new PokeGridFragment();
-                args = new Bundle();
-                fragment.setArguments(args);
-
-                fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.activity_list, fragment)
-                        .commit();
-
-                mListView.setItemChecked(position, true);
-                mDrawerLayout.closeDrawer(mListView);
+                changeFragment(new PokeGridFragment(), position);
                 break;
             case 1:
                 Toast.makeText(GridActivity.this, "todo", Toast.LENGTH_LONG).show();
                 break;
             case 2:
-                fragment = new RegisterFragment();
-                args = new Bundle();
-                fragment.setArguments(args);
-
-                fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.activity_list, fragment)
-                        .commit();
-
-                mListView.setItemChecked(position, true);
-                mDrawerLayout.closeDrawer(mListView);
+                changeFragment(new SignUpFragment(), position);
                 break;
+            case 3:
+                changeFragment(new SignInFragment(), position);
             default:
         }
+    }
+
+    private void changeFragment(Fragment myfragment, int position) {
+        Fragment fragment = myfragment;
+        Bundle args;
+        FragmentManager fragmentManager;
+        args = new Bundle();
+        fragment.setArguments(args);
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.activity_list, fragment)
+                .commit();
+
+        mListView.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mListView);
     }
 
     private void setupDrawer() {
