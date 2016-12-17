@@ -92,6 +92,7 @@ public class SignUpFragment extends Fragment {
             public void onSuccess(JSONObject json) {
                 SharedPreferences sharedPreference = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreference.edit();
+                progressDialog.dismiss();
 
                 try {
                     JSONObject resultJSON = json.getJSONObject("result");
@@ -102,16 +103,17 @@ public class SignUpFragment extends Fragment {
                     editor.putBoolean("is_connected", true);
                     editor.apply();
 
-                    progressDialog.dismiss();
                     onSignupSuccess();
 
                 } catch (JSONException e) {
+                    onSignupFailed();
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailed(String msg) {
+                progressDialog.dismiss();
                 onSignupFailed();
             }
         });
