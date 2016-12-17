@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -36,6 +37,7 @@ public class SignUpFragment extends Fragment {
     private EditText editfirstName;
     private EditText editlastName;
     public Button registerButton;
+    public TextView loginLink;
 
 
     @Override
@@ -61,7 +63,19 @@ public class SignUpFragment extends Fragment {
             }
         });
 
+        loginLink = (TextView) view.findViewById(R.id.link_login);
+        loginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new SignInFragment();
+                FragmentManager fragmentManager;
 
+                fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.activity_list, fragment)
+                        .commit();
+            }
+        });
 
         return view;
     }
