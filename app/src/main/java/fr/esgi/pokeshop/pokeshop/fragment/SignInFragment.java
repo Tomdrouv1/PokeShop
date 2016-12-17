@@ -3,6 +3,8 @@ package fr.esgi.pokeshop.pokeshop.fragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import fr.esgi.pokeshop.pokeshop.R;
+import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
+import fr.esgi.pokeshop.pokeshop.service.WebService;
+import fr.esgi.pokeshop.pokeshop.utils.Constant;
 
 /**
  * Created by Marion on 17/12/2016.
@@ -54,10 +62,7 @@ public class SignInFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new SignUpFragment();
-                Bundle args;
                 FragmentManager fragmentManager;
-                args = new Bundle();
-                fragment.setArguments(args);
 
                 fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
@@ -71,7 +76,6 @@ public class SignInFragment extends Fragment {
 
     public void login() {
         if (!validate()) {
-            onLoginFailed();
             return;
         }
 
@@ -85,21 +89,53 @@ public class SignInFragment extends Fragment {
         email = editEmail.getText().toString();
         password = editPwd.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
+        String url = Constant.WS_LOGIN_URL+"?email="+email+"&password="+password;
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        onLoginSuccess();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        final WebService asyncTask = new WebService(this.getActivity());
+        asyncTask.setListener(new ConnectListener() {
+            @Override
+            public void onSuccess(JSONObject json) {
+                SharedPreferences sharedPreference = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreference.edit();
+
+                try {
+                    JSONObject resultJSON = json.getJSONObject("result");
+                    editor.putString("first_name", resultJSON.getString("firstname"));
+                    editor.putString("last_name", resultJSON.getString("lastname"));
+                    editor.putString("email", resultJSON.getString("email"));
+                    editor.putString("user_token", resultJSON.getString("token"));
+                    editor.putBoolean("is_connected",true);
+                    editor.apply();
+
+                    progressDialog.dismiss();
+                    onLoginSuccess();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+            @Override
+            public void onFailed(String msg) {
+                onLoginFailed();
+            }
+        });
+
+        asyncTask.execute(url);
     }
 
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
-        // stocker le token et aller au prochain fragment
+        Fragment fragment = new PokeGridFragment();
+        FragmentManager fragmentManager;
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.activity_list, fragment)
+                .commit();
     }
+
 
     public void onLoginFailed() {
         Toast.makeText(getActivity(), "Erreur de connexion", Toast.LENGTH_LONG).show();
