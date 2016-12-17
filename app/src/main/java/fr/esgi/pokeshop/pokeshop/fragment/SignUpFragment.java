@@ -1,6 +1,7 @@
 package fr.esgi.pokeshop.pokeshop.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -98,7 +99,7 @@ public class SignUpFragment extends Fragment {
                     editor.putString("last_name", resultJSON.getString("lastname"));
                     editor.putString("email", resultJSON.getString("email"));
                     editor.putString("user_token", resultJSON.getString("token"));
-                    editor.putBoolean("is_connected",true);
+                    editor.putBoolean("is_connected", true);
                     editor.apply();
 
                     progressDialog.dismiss();
@@ -119,9 +120,16 @@ public class SignUpFragment extends Fragment {
     }
 
     public void onSignupSuccess() {
-        Toast.makeText(getActivity(), "Succès !", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Enregistré et connecté avec succès !", Toast.LENGTH_LONG).show();
         registerButton.setEnabled(true);
-        // aller au prochain fragment
+
+        Fragment fragment = new PokeGridFragment();
+        FragmentManager fragmentManager;
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.activity_list, fragment)
+                .commit();
     }
 
     public void onSignupFailed() {

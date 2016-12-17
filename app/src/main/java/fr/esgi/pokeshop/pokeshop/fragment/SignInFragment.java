@@ -104,7 +104,7 @@ public class SignInFragment extends Fragment {
                     editor.putString("last_name", resultJSON.getString("lastname"));
                     editor.putString("email", resultJSON.getString("email"));
                     editor.putString("user_token", resultJSON.getString("token"));
-                    editor.putBoolean("is_connected",true);
+                    editor.putBoolean("is_connected", true);
                     editor.apply();
 
                     progressDialog.dismiss();
@@ -127,6 +127,7 @@ public class SignInFragment extends Fragment {
 
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
+        Toast.makeText(getActivity(), "Connecté avec succès !", Toast.LENGTH_LONG).show();
         Fragment fragment = new PokeGridFragment();
         FragmentManager fragmentManager;
 
