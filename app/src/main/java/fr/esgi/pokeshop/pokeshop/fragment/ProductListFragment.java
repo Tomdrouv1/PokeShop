@@ -23,7 +23,6 @@ import java.util.List;
 
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.adapter.ProductAdapter;
-import fr.esgi.pokeshop.pokeshop.adapter.ShoppingListAdapter;
 import fr.esgi.pokeshop.pokeshop.model.Product;
 import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
 import fr.esgi.pokeshop.pokeshop.service.WebService;

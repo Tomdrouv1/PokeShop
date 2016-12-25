@@ -19,7 +19,6 @@ import java.util.List;
 
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.fragment.ProductListFragment;
-import fr.esgi.pokeshop.pokeshop.fragment.ShoppingListFragment;
 import fr.esgi.pokeshop.pokeshop.holder.ProductHolder;
 import fr.esgi.pokeshop.pokeshop.model.Product;
 import fr.esgi.pokeshop.pokeshop.service.ConnectListener;

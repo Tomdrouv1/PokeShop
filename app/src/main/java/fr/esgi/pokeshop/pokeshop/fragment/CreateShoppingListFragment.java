@@ -2,7 +2,6 @@ package fr.esgi.pokeshop.pokeshop.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ListFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -98,7 +97,7 @@ public class CreateShoppingListFragment extends Fragment {
 
             @Override
             public void onFailed(String msg) {
-                // TODO: 25/12/2016  
+                // TODO: 25/12/2016
                 // onLoginFailed();
             }
         });
