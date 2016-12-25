@@ -18,6 +18,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.activity.GridActivity;
 import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
@@ -68,7 +71,7 @@ public class SignInFragment extends Fragment {
 
                 fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.form_container, fragment)
+                        .replace(R.id.activity_list, fragment)
                         .commit();
             }
         });
@@ -91,7 +94,14 @@ public class SignInFragment extends Fragment {
         email = editEmail.getText().toString();
         password = editPwd.getText().toString();
 
-        String url = Constant.WS_LOGIN_URL+"?email="+email+"&password="+password;
+        try {
+            email = URLEncoder.encode(email,"UTF-8");
+            password = URLEncoder.encode(password,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = Constant.LOGIN_URL + "?email=" + email + "&password=" + password;
 
         final WebService asyncTask = new WebService(this.getActivity());
         asyncTask.setListener(new ConnectListener() {
@@ -131,8 +141,13 @@ public class SignInFragment extends Fragment {
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
         Toast.makeText(getActivity(), "Connecté avec succès !", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this.getActivity(), GridActivity.class);
-        startActivity(intent);
+        Fragment fragment = new PokeGridFragment();
+        FragmentManager fragmentManager;
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.activity_list, fragment)
+                .commit();
     }
 
 

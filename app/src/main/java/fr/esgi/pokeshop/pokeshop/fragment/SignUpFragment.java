@@ -18,6 +18,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.activity.GridActivity;
 import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
@@ -74,7 +77,7 @@ public class SignUpFragment extends Fragment {
 
                 fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.form_container, fragment)
+                        .replace(R.id.activity_list, fragment)
                         .commit();
             }
         });
@@ -100,7 +103,16 @@ public class SignUpFragment extends Fragment {
         email = editEmail.getText().toString();
         password = editPwd.getText().toString();
 
-        String url = Constant.WS_SIGNUP_URL+"?email="+email+"&password="+password+"&firstname="+firstname+"&lastname="+lastname;
+        try {
+            firstname = URLEncoder.encode(firstname,"UTF-8");
+            lastname = URLEncoder.encode(lastname,"UTF-8");
+            email = URLEncoder.encode(email,"UTF-8");
+            password = URLEncoder.encode(password,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = Constant.SIGNUP_URL + "?email=" + email + "&password=" + password + "&firstname=" + firstname + "&lastname=" + lastname;
 
         final WebService asyncTask = new WebService(this.getActivity());
         asyncTask.setListener(new ConnectListener() {
@@ -140,8 +152,13 @@ public class SignUpFragment extends Fragment {
     public void onSignupSuccess() {
         Toast.makeText(getActivity(), "Enregistré et connecté avec succès !", Toast.LENGTH_LONG).show();
         registerButton.setEnabled(true);
-        Intent intent = new Intent(this.getActivity(), GridActivity.class);
-        startActivity(intent);
+        Fragment fragment = new PokeGridFragment();
+        FragmentManager fragmentManager;
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.activity_list, fragment)
+                .commit();
     }
 
     public void onSignupFailed() {

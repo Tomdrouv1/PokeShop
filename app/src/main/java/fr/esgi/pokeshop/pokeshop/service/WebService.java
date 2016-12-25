@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -47,14 +49,15 @@ public class WebService extends AsyncTask<String, Void, JSONObject> {
         try {
             url = new URL(params[0]);
             URLConnection connection = url.openConnection();
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             connection.setDoOutput(true);
 
             OutputStreamWriter outputStreamWr = new OutputStreamWriter(connection.getOutputStream());
             outputStreamWr.write(data);
             outputStreamWr.flush();
 
-            br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+//            br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder sb = new StringBuilder();
             String line = null;
 

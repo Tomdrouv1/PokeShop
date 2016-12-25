@@ -22,15 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.esgi.pokeshop.pokeshop.R;
-import fr.esgi.pokeshop.pokeshop.fragment.SignInFragment;
+import fr.esgi.pokeshop.pokeshop.fragment.ShoppingListFragment;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeGridFragment;
 import fr.esgi.pokeshop.pokeshop.fragment.PokeListFragment;
-import fr.esgi.pokeshop.pokeshop.fragment.SignUpFragment;
+import fr.esgi.pokeshop.pokeshop.fragment.SignInFragment;
 
 public class GridActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private DrawerLayout mDrawerLayout;
+    public DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private Button mGridButton;
@@ -42,6 +42,8 @@ public class GridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
+        SharedPreferences settings = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        boolean isConnected = settings.getBoolean("is_connected", false);
         mListView = (ListView) findViewById(R.id.navigation_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -49,17 +51,23 @@ public class GridActivity extends AppCompatActivity {
         mListButton = (Button) findViewById(R.id.to_list);
         mListGridTitle = (TextView) findViewById(R.id.list_grid_title);
 
-        getFragmentManager().beginTransaction()
-            .add(R.id.activity_list, new PokeListFragment())
-            .commit();
-
         addDrawerItems();
         setupDrawer();
         setButtonListener();
 
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
+        }
+
+        if(isConnected){
+            getFragmentManager().beginTransaction()
+                    .add(R.id.activity_list, new PokeListFragment())
+                    .commit();
+        } else {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.activity_list, new SignInFragment())
+                    .commit();
         }
     }
 
@@ -67,6 +75,7 @@ public class GridActivity extends AppCompatActivity {
         String[] navigationArray = {
                 "Pokémons",
                 "Catégories",
+                "Mes listes",
                 "Déconnexion"
         };
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this,
@@ -89,10 +98,12 @@ public class GridActivity extends AppCompatActivity {
                 Toast.makeText(GridActivity.this, "todo", Toast.LENGTH_LONG).show();
                 break;
             case 2:
+                changeFragment(new ShoppingListFragment(), position);
+                break;
+            case 3:
                 SharedPreferences settings = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
                 settings.edit().clear().apply();
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                changeFragment(new SignInFragment(), position);
                 Toast.makeText(GridActivity.this, "Déconnecté !", Toast.LENGTH_LONG).show();
                 break;
             default:
@@ -162,6 +173,22 @@ public class GridActivity extends AppCompatActivity {
                 mListGridTitle.setText(R.string.list_title);
             }
         });
+    }
+
+    public void setDrawerState(boolean isEnabled) {
+        if ( isEnabled ) {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            mDrawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
+            mDrawerToggle.setDrawerIndicatorEnabled(true);
+            mDrawerToggle.syncState();
+
+        }
+        else {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            mDrawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
+            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            mDrawerToggle.syncState();
+        }
     }
 
     @Override

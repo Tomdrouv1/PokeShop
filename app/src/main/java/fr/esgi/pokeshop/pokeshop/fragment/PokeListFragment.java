@@ -8,9 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.adapter.ImageAndTextAdapter;
+import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
+import fr.esgi.pokeshop.pokeshop.service.WebService;
 
 
 public class PokeListFragment extends Fragment {
@@ -27,5 +32,6 @@ public class PokeListFragment extends Fragment {
 
         ListView listView = (ListView) view.findViewById(R.id.poke_list);
         listView.setAdapter(new ImageAndTextAdapter(this.getActivity()));
+
     }
 }
