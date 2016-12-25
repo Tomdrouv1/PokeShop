@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.esgi.pokeshop.pokeshop.R;
+import fr.esgi.pokeshop.pokeshop.activity.GridActivity;
 import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
 import fr.esgi.pokeshop.pokeshop.service.WebService;
 import fr.esgi.pokeshop.pokeshop.utils.Constant;
@@ -72,7 +74,7 @@ public class SignUpFragment extends Fragment {
 
                 fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.activity_list, fragment)
+                        .replace(R.id.form_container, fragment)
                         .commit();
             }
         });
@@ -104,8 +106,8 @@ public class SignUpFragment extends Fragment {
         asyncTask.setListener(new ConnectListener() {
             @Override
             public void onSuccess(JSONObject json) {
-                SharedPreferences sharedPreference = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreference.edit();
+                SharedPreferences settings = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
                 progressDialog.dismiss();
 
                 try {
@@ -138,14 +140,8 @@ public class SignUpFragment extends Fragment {
     public void onSignupSuccess() {
         Toast.makeText(getActivity(), "Enregistré et connecté avec succès !", Toast.LENGTH_LONG).show();
         registerButton.setEnabled(true);
-
-        Fragment fragment = new PokeGridFragment();
-        FragmentManager fragmentManager;
-
-        fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.activity_list, fragment)
-                .commit();
+        Intent intent = new Intent(this.getActivity(), GridActivity.class);
+        startActivity(intent);
     }
 
     public void onSignupFailed() {

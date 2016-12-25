@@ -2,6 +2,9 @@ package fr.esgi.pokeshop.pokeshop.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,7 +42,6 @@ public class GridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
-
         mListView = (ListView) findViewById(R.id.navigation_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -65,8 +67,7 @@ public class GridActivity extends AppCompatActivity {
         String[] navigationArray = {
                 "Pokémons",
                 "Catégories",
-                "S'inscrire",
-                "Se connecter"
+                "Déconnexion"
         };
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, navigationArray);
@@ -88,20 +89,19 @@ public class GridActivity extends AppCompatActivity {
                 Toast.makeText(GridActivity.this, "todo", Toast.LENGTH_LONG).show();
                 break;
             case 2:
-                changeFragment(new SignUpFragment(), position);
+                SharedPreferences settings = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
+                settings.edit().clear().apply();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                Toast.makeText(GridActivity.this, "Déconnecté !", Toast.LENGTH_LONG).show();
                 break;
-            case 3:
-                changeFragment(new SignInFragment(), position);
             default:
         }
     }
 
     private void changeFragment(Fragment myfragment, int position) {
         Fragment fragment = myfragment;
-        Bundle args;
         FragmentManager fragmentManager;
-        args = new Bundle();
-        fragment.setArguments(args);
 
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
