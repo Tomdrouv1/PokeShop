@@ -45,7 +45,7 @@ public class ShoppingListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.shopping_list_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
     }
 
     @Override
@@ -92,7 +92,15 @@ public class ShoppingListFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3){
                             ShoppingList item = (ShoppingList) shoppingListListView.getItemAtPosition(position);
-                            Toast.makeText(getActivity(), item.getName(), Toast.LENGTH_SHORT).show();
+
+                            Fragment fragment = new ProductListFragment();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            Bundle args = new Bundle();
+                            args.putInt("listId", item.getId());
+                            fragment.setArguments(args);
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.activity_list, fragment)
+                                    .commit();
                         }
                     });
 

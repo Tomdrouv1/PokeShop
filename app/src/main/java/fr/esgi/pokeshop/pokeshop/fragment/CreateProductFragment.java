@@ -2,7 +2,6 @@ package fr.esgi.pokeshop.pokeshop.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ListFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,10 +27,14 @@ import fr.esgi.pokeshop.pokeshop.utils.Constant;
  * Created by Marion on 25/12/2016.
  */
 
-public class CreateShoppingListFragment extends Fragment {
+public class CreateProductFragment extends Fragment {
 
     private EditText editName;
+    private EditText editQuantity;
+    private EditText editPrice;
     private String name;
+    private String quantity;
+    private String price;
 
     public Button createButton;
 
@@ -43,9 +46,12 @@ public class CreateShoppingListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_create_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_create_product, container, false);
+
 
         editName = (EditText) view.findViewById(R.id.name);
+        editQuantity = (EditText) view.findViewById(R.id.quantity);
+        editPrice = (EditText) view.findViewById(R.id.price);
 
         createButton = (Button) view.findViewById(R.id.create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +69,12 @@ public class CreateShoppingListFragment extends Fragment {
             return;
         }
 
+        Bundle args = getArguments();
+        int id = args.getInt("listId");
+
         name = editName.getText().toString();
+        Integer qty = Integer.parseInt(editQuantity.getText().toString());
+        Double price = Double.parseDouble(editPrice.getText().toString());
 
         SharedPreferences settings = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
         String userToken = settings.getString("user_token", null);
@@ -72,7 +83,7 @@ public class CreateShoppingListFragment extends Fragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = Constant.CREATE_SHOPPINGLIST_URL + "?token=" + userToken + "&name=" + name;
+        String url = Constant.CREATE_PRODUCT_URL + "?token=" + userToken + "&shopping_list_id=" + id + "&name=" + name + "&quantity=" + qty + "&price=" + price;
 
         final WebService asyncTask = new WebService(this.getActivity());
         asyncTask.setListener(new ConnectListener() {
@@ -81,15 +92,18 @@ public class CreateShoppingListFragment extends Fragment {
                 try {
                     JSONObject resultJSON = json.getJSONObject("result");
 
-                    Toast.makeText(getActivity(), "Liste " + resultJSON.getString("name") + " crée !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Produit " + resultJSON.getString("name") + " crée !", Toast.LENGTH_SHORT).show();
 
-                    Fragment fragment = new ShoppingListFragment();
-                    FragmentManager fragmentManager;
-
-                    fragmentManager = getFragmentManager();
+                    Bundle args = getArguments();
+                    int id = args.getInt("listId");
+                    Fragment fragment = new ProductListFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    args.putInt("listId", id);
+                    fragment.setArguments(args);
                     fragmentManager.beginTransaction()
                             .replace(R.id.activity_list, fragment)
                             .commit();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -104,7 +118,6 @@ public class CreateShoppingListFragment extends Fragment {
         });
 
         asyncTask.execute(url);
-
     }
 
     private boolean validate() {
@@ -116,6 +129,22 @@ public class CreateShoppingListFragment extends Fragment {
             valid = false;
         } else {
             editName.setError(null);
+        }
+
+        quantity = editQuantity.getText().toString();
+        if (quantity.isEmpty()) {
+            editQuantity.setError("choisir une quantité");
+            valid = false;
+        } else {
+            editQuantity.setError(null);
+        }
+
+        price = editPrice.getText().toString();
+        if (price.isEmpty()) {
+            editPrice.setError("choisir un prix");
+            valid = false;
+        } else {
+            editPrice.setError(null);
         }
 
         return valid;
