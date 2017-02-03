@@ -33,9 +33,6 @@ public class GridActivity extends AppCompatActivity {
     public DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
-//    private Button mGridButton;
-//    private Button mListButton;
-    private TextView mListGridTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +44,9 @@ public class GridActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.navigation_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
-//        mGridButton = (Button) findViewById(R.id.to_grid);
-//        mListButton = (Button) findViewById(R.id.to_list);
-//        mListGridTitle = (TextView) findViewById(R.id.list_grid_title);
 
-        addDrawerItems();
+
         setupDrawer();
-        setButtonListener();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,8 +54,9 @@ public class GridActivity extends AppCompatActivity {
         }
 
         if(isConnected){
+            addDrawerItems();
             getFragmentManager().beginTransaction()
-                    .add(R.id.activity_list, new PokeListFragment())
+                    .add(R.id.activity_list, new ShoppingListFragment())
                     .commit();
         } else {
             getFragmentManager().beginTransaction()
@@ -71,10 +65,8 @@ public class GridActivity extends AppCompatActivity {
         }
     }
 
-    private void addDrawerItems() {
+    public void addDrawerItems() {
         String[] navigationArray = {
-                "Pokémons",
-                "Catégories",
                 "Mes listes",
                 "Déconnexion"
         };
@@ -92,15 +84,9 @@ public class GridActivity extends AppCompatActivity {
     private void selectItem(int position) {
         switch(position) {
             case 0:
-                changeFragment(new PokeGridFragment(), position);
-                break;
-            case 1:
-                Toast.makeText(GridActivity.this, "todo", Toast.LENGTH_LONG).show();
-                break;
-            case 2:
                 changeFragment(new ShoppingListFragment(), position);
                 break;
-            case 3:
+            case 1:
                 SharedPreferences settings = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
                 settings.edit().clear().apply();
                 changeFragment(new SignInFragment(), position);
@@ -151,29 +137,6 @@ public class GridActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
-    private void setButtonListener() {
-//        mGridButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getFragmentManager().beginTransaction()
-//                        .replace(R.id.activity_list, new PokeGridFragment())
-//                        .commit();
-//
-//                mListGridTitle.setText(R.string.grid_title);
-//            }
-//        });
-//
-//        mListButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getFragmentManager().beginTransaction()
-//                        .replace(R.id.activity_list, new PokeListFragment())
-//                        .commit();
-//
-//                mListGridTitle.setText(R.string.list_title);
-//            }
-//        });
-    }
 
     public void setDrawerState(boolean isEnabled) {
         if ( isEnabled ) {

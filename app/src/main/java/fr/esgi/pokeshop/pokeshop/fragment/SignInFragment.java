@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import fr.esgi.pokeshop.pokeshop.R;
+import fr.esgi.pokeshop.pokeshop.activity.GridActivity;
 import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
 import fr.esgi.pokeshop.pokeshop.service.WebService;
 import fr.esgi.pokeshop.pokeshop.utils.Constant;
@@ -141,6 +142,9 @@ public class SignInFragment extends Fragment {
         Toast.makeText(getActivity(), "Connecté avec succès !", Toast.LENGTH_LONG).show();
         Fragment fragment = new PokeGridFragment();
         FragmentManager fragmentManager;
+
+        GridActivity activity = (GridActivity) getActivity();
+        activity.addDrawerItems();
 
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
