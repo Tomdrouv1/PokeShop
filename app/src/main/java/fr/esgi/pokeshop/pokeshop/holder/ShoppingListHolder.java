@@ -11,4 +11,5 @@ public class ShoppingListHolder {
     public TextView name;
     public TextView createdDate;
     public Button deleteList;
+    public Button editList;
 }

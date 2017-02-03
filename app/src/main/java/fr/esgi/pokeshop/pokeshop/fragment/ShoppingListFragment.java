@@ -30,6 +30,7 @@ import fr.esgi.pokeshop.pokeshop.model.ShoppingList;
 import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
 import fr.esgi.pokeshop.pokeshop.service.WebService;
 import fr.esgi.pokeshop.pokeshop.utils.Constant;
+import android.support.design.widget.FloatingActionButton;
 
 /**
  * Created by Marion on 25/12/2016.
@@ -37,9 +38,9 @@ import fr.esgi.pokeshop.pokeshop.utils.Constant;
 
 public class ShoppingListFragment extends Fragment {
 
-    private Button addList;
-    private ShoppingList shopingList;
-    private List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
+    private FloatingActionButton addList;
+    private ShoppingList shoppingList;
+    private List<ShoppingList> shoppingLists ;
     private ListView shoppingListListView;
 
     @Nullable
@@ -53,6 +54,7 @@ public class ShoppingListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         shoppingListListView = (ListView) view.findViewById(R.id.shopping_list);
+        shoppingLists = new ArrayList<ShoppingList>();
 
         final WebService asyncTask = new WebService(this.getActivity());
         asyncTask.setListener(new ConnectListener() {
@@ -80,11 +82,11 @@ public class ShoppingListFragment extends Fragment {
                         completed = item.getString("completed");
 
                         if (completed.equals("0")){
-                            shopingList = new ShoppingList(id, name, date, false);
+                            shoppingList = new ShoppingList(id, name, date, false);
                         } else {
-                            shopingList = new ShoppingList(id, name, date, true);
+                            shoppingList = new ShoppingList(id, name, date, true);
                         }
-                        shoppingLists.add(shopingList);
+                        shoppingLists.add(shoppingList);
                     }
                     shoppingListAdapter = new ShoppingListAdapter(getActivity(), shoppingLists);
                     shoppingListListView.setAdapter(shoppingListAdapter);
@@ -100,6 +102,7 @@ public class ShoppingListFragment extends Fragment {
                             fragment.setArguments(args);
                             fragmentManager.beginTransaction()
                                     .replace(R.id.activity_list, fragment)
+                                    .addToBackStack(null)
                                     .commit();
                         }
                     });
@@ -120,7 +123,7 @@ public class ShoppingListFragment extends Fragment {
         String url = Constant.LIST_SHOPPINGLIST_URL + "?token=" + userToken;
         asyncTask.execute(url);
 
-        addList = (Button) view.findViewById(R.id.add_list);
+        addList = (FloatingActionButton) view.findViewById(R.id.add_list);
         addList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +133,7 @@ public class ShoppingListFragment extends Fragment {
                 fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.activity_list, fragment)
+                        .addToBackStack(null)
                         .commit();
             }
         });

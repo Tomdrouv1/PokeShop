@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +35,9 @@ import fr.esgi.pokeshop.pokeshop.utils.Constant;
 
 public class ProductListFragment extends Fragment {
 
-    private Button addProduct;
+    private FloatingActionButton addProduct;
     private Product product;
-    private List<Product> productList = new ArrayList<Product>();
+    private List<Product> productList;
     private ListView productListView;
     private TextView total;
 
@@ -49,9 +50,10 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         Bundle args = getArguments();
-        int id = args.getInt("listId");
+        final int listId = args.getInt("listId");
 
         productListView = (ListView) view.findViewById(R.id.product_list);
+        productList = new ArrayList<Product>();
         total = (TextView) view.findViewById(R.id.total);
 
         final WebService asyncTask = new WebService(this.getActivity());
@@ -63,6 +65,7 @@ public class ProductListFragment extends Fragment {
                 String name;
                 Integer quantity;
                 Double price;
+                int shoppingListId;
                 ProductAdapter productAdapter;
                 int id;
                 try {
@@ -73,8 +76,9 @@ public class ProductListFragment extends Fragment {
                         name = item.getString("name");
                         quantity = item.getInt("quantity");
                         price = item.getDouble("price");
+                        shoppingListId = listId;
 
-                        product = new Product(id, name, quantity, price);
+                        product = new Product(id, name, quantity, price, shoppingListId);
                         productList.add(product);
                     }
                     productAdapter = new ProductAdapter(getActivity(), productList);
@@ -97,10 +101,10 @@ public class ProductListFragment extends Fragment {
 
         SharedPreferences settings = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
         String userToken = settings.getString("user_token", null);
-        String url = Constant.LIST_PRODUCT_URL + "?token=" + userToken + "&shopping_list_id=" + id;
+        String url = Constant.LIST_PRODUCT_URL + "?token=" + userToken + "&shopping_list_id=" + listId;
         asyncTask.execute(url);
 
-        addProduct = (Button) view.findViewById(R.id.add_product);
+        addProduct = (FloatingActionButton) view.findViewById(R.id.add_product);
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +118,7 @@ public class ProductListFragment extends Fragment {
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction()
                         .replace(R.id.activity_list, fragment)
+                        .addToBackStack(null)
                         .commit();
             }
         });

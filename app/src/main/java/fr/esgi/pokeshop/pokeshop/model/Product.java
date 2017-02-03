@@ -4,21 +4,32 @@ public class Product {
 
     private Integer id;
 
+    private Integer shoppingListId;
+
     private String name;
 
     private Integer quantity;
 
     private Double price;
 
-    public Product(Integer id, String name, Integer quantity, Double price) {
+    public Product(Integer id, String name, Integer quantity, Double price, Integer shoppingListId) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
+        this.shoppingListId = shoppingListId;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getShoppingListId() {
+        return shoppingListId;
+    }
+
+    public void setShoppingListId(Integer shoppingListId) {
+        this.shoppingListId = shoppingListId;
     }
 
     public String getName() {

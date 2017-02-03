@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import fr.esgi.pokeshop.pokeshop.R;
+import fr.esgi.pokeshop.pokeshop.fragment.EditProductFragment;
 import fr.esgi.pokeshop.pokeshop.fragment.ProductListFragment;
 import fr.esgi.pokeshop.pokeshop.holder.ProductHolder;
 import fr.esgi.pokeshop.pokeshop.model.Product;
@@ -50,6 +52,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             viewHolder.name = (TextView) convertView.findViewById(R.id.product_name);
             viewHolder.quantity = (TextView) convertView.findViewById(R.id.quantity);
             viewHolder.deleteProduct = (Button) convertView.findViewById(R.id.delete_product);
+            viewHolder.editProduct = (Button) convertView.findViewById(R.id.edit_product);
             convertView.setTag(viewHolder);
         }
         final Product product = getItem(position);
@@ -86,6 +89,29 @@ public class ProductAdapter extends ArrayAdapter<Product> {
                     String url = Constant.REMOVE_PRODUCT_URL + "?token=" + userToken + "&id=" + product.getId();
                     asyncTask.execute(url);
                 }
+            }
+        });
+
+        viewHolder.editProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Fragment fragment = new EditProductFragment();
+                Bundle args = new Bundle();
+                args.putInt("productId", product.getId());
+                args.putInt("listId", product.getShoppingListId());
+                args.putString("productName", product.getName());
+                args.putInt("productQuantity", product.getQuantity());
+                args.putDouble("productPrice", product.getPrice());
+                fragment.setArguments(args);
+
+                FragmentManager fragmentManager;
+
+                fragmentManager = ((Activity) getContext()).getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.activity_list, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
