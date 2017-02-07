@@ -32,10 +32,6 @@ import fr.esgi.pokeshop.pokeshop.service.WebService;
 import fr.esgi.pokeshop.pokeshop.utils.Constant;
 import android.support.design.widget.FloatingActionButton;
 
-/**
- * Created by Marion on 25/12/2016.
- */
-
 public class ShoppingListFragment extends Fragment {
 
     private FloatingActionButton addList;

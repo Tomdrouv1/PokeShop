@@ -57,9 +57,8 @@ public class WebService extends AsyncTask<String, Void, JSONObject> {
             outputStreamWr.flush();
 
             br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-//            br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
 
             while((line = br.readLine())!=null) {
                 sb.append(line);
@@ -69,10 +68,7 @@ public class WebService extends AsyncTask<String, Void, JSONObject> {
             content = sb.toString();
             jsonResponse = new JSONObject(content);
 
-        } catch (JSONException e) {
-            error = e.getMessage();
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             error = e.getMessage();
             e.printStackTrace();
         } finally {

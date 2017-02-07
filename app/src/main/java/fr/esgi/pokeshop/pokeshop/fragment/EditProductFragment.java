@@ -24,10 +24,6 @@ import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
 import fr.esgi.pokeshop.pokeshop.service.WebService;
 import fr.esgi.pokeshop.pokeshop.utils.Constant;
 
-/**
- * Created by Marion on 03/02/2017.
- */
-
 public class EditProductFragment extends Fragment {
 
     private EditText editName;

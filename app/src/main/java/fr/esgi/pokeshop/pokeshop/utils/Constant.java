@@ -1,9 +1,5 @@
 package fr.esgi.pokeshop.pokeshop.utils;
 
-/**
- * Created by Marion on 17/12/2016.
- */
-
 public class Constant {
     public static final String LOGIN_URL = "http://appspaces.fr/esgi/shopping_list/account/login.php";
     public static final String SIGNUP_URL = "http://appspaces.fr/esgi/shopping_list/account/subscribe.php";

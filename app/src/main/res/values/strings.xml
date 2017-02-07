@@ -1,9 +1,29 @@
 <resources>
-    <string name="app_name">PokeShop</string>
+    <string name="app_name">ShoppingList</string>
     <string name="shopping_cart">Panier</string>
     <string name="account_profile">Profil</string>
     <string name="drawer_open">Ouvrir la navigation</string>
     <string name="drawer_close">Fermer la navigation</string>
     <string name="list_title">Liste des Pokémons</string>
     <string name="grid_title">Grille des Pokémons</string>
+    <string name="create_list">Créer une liste</string>
+    <string name="list_name">Nom de la liste</string>
+    <string name="create_button">Créer</string>
+    <string name="create_product">Créer un produit</string>
+    <string name="product_name">Nom du produit</string>
+    <string name="quantity">Quantité</string>
+    <string name="price">Prix</string>
+    <string name="update_list">Editer une liste</string>
+    <string name="update_button">Editer</string>
+    <string name="update_product">Editer un produit</string>
+    <string name="login_title">Connexion</string>
+    <string name="email">E-mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="login_button">Se connecter</string>
+    <string name="no_account_link">Pas de compte ? Créez-en un</string>
+    <string name="register_title">Inscription</string>
+    <string name="firstname">Prénom</string>
+    <string name="lastname">Nom</string>
+    <string name="register_button">S\'enregistrer</string>
+    <string name="already_connect_link">Déjà inscrit ? Connectez-vous</string>
 </resources>

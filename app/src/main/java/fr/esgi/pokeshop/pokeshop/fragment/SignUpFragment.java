@@ -25,10 +25,6 @@ import fr.esgi.pokeshop.pokeshop.service.ConnectListener;
 import fr.esgi.pokeshop.pokeshop.service.WebService;
 import fr.esgi.pokeshop.pokeshop.utils.Constant;
 
-/**
- * Created by Marion on 11/12/2016.
- */
-
 public class SignUpFragment extends Fragment {
     public static String email;
     public static String password;
@@ -150,7 +146,7 @@ public class SignUpFragment extends Fragment {
     public void onSignupSuccess() {
         Toast.makeText(getActivity(), "Enregistré et connecté avec succès !", Toast.LENGTH_LONG).show();
         registerButton.setEnabled(true);
-        Fragment fragment = new PokeGridFragment();
+        Fragment fragment = new GridFragment();
         FragmentManager fragmentManager;
 
         fragmentManager = getFragmentManager();

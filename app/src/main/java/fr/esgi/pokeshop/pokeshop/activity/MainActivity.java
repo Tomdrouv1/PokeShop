@@ -3,7 +3,6 @@ package fr.esgi.pokeshop.pokeshop.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,23 +10,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.esgi.pokeshop.pokeshop.R;
 import fr.esgi.pokeshop.pokeshop.fragment.ShoppingListFragment;
-import fr.esgi.pokeshop.pokeshop.fragment.PokeGridFragment;
-import fr.esgi.pokeshop.pokeshop.fragment.PokeListFragment;
 import fr.esgi.pokeshop.pokeshop.fragment.SignInFragment;
 
-public class GridActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
     public DrawerLayout mDrawerLayout;
@@ -90,19 +84,18 @@ public class GridActivity extends AppCompatActivity {
                 SharedPreferences settings = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
                 settings.edit().clear().apply();
                 changeFragment(new SignInFragment(), position);
-                Toast.makeText(GridActivity.this, "Déconnecté !", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Déconnecté !", Toast.LENGTH_LONG).show();
                 break;
             default:
         }
     }
 
     private void changeFragment(Fragment myfragment, int position) {
-        Fragment fragment = myfragment;
         FragmentManager fragmentManager;
 
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.activity_list, fragment)
+                .replace(R.id.activity_list, myfragment)
                 .commit();
 
         mListView.setItemChecked(position, true);
@@ -138,22 +131,6 @@ public class GridActivity extends AppCompatActivity {
     }
 
 
-    public void setDrawerState(boolean isEnabled) {
-        if ( isEnabled ) {
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            mDrawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
-            mDrawerToggle.setDrawerIndicatorEnabled(true);
-            mDrawerToggle.syncState();
-
-        }
-        else {
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            mDrawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
-            mDrawerToggle.setDrawerIndicatorEnabled(false);
-            mDrawerToggle.syncState();
-        }
-    }
-
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -164,12 +141,6 @@ public class GridActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
     }
 
     @Override
