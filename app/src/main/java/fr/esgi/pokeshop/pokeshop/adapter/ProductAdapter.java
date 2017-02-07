@@ -64,8 +64,11 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             @Override
             public void onSuccess(JSONObject json) {
                 Toast.makeText(getContext(), "Supprimé", Toast.LENGTH_LONG).show();
-                // TODO: 25/12/2016  rediriger vers la liste des produits
                 Fragment fragment = new ProductListFragment();
+                Bundle args = new Bundle();
+                args.putInt("listId", product.getShoppingListId());
+                fragment.setArguments(args);
+
                 FragmentManager fragmentManager;
 
                 fragmentManager = ((Activity) context).getFragmentManager();

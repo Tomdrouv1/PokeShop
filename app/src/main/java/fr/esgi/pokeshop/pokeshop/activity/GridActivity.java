@@ -167,12 +167,6 @@ public class GridActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return (mDrawerToggle.onOptionsItemSelected(item)) || super.onOptionsItemSelected(item);
     }
